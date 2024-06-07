@@ -1,0 +1,36 @@
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+# 基于编辑器的 HTTP 客户端请求
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Spring Boot
+target/
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+*.ipr
+*.iws
+mvnw
+mvnw.cmd
+.gradle/
+build/
+!gradle-wrapper.jar
+*.tmp
+*.swp
+*.bak
+
+# Vue
+node_modules/
+dist/
+build/
+*.log
+.env
+.env.*.local
+.vscode/
+
+
