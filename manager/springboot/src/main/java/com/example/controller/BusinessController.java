@@ -20,7 +20,9 @@ public class BusinessController {
 
     @Resource
     private BusinessService businessService;
-
+    /**
+     * 添加商家
+     */
     @PostMapping("/add")
     public Result add(@RequestBody Business business) {
         if (ObjectUtils.isEmpty(business.getUsername())||ObjectUtils.isEmpty(business.getPassword()))
@@ -32,7 +34,7 @@ public class BusinessController {
     /**
      * 修改商家
      */
-    @PutMapping("/update")
+    @PostMapping("/update")
     public Result update(@RequestBody Business business) {
         businessService.updateById(business);
         return Result.success();
@@ -70,9 +72,20 @@ public class BusinessController {
      * 批量删除
      */
     @PostMapping("/delete/batch")
-    public Result deleteBatch(@RequestBody Ids ids) {
-        businessService.deleteBatch(ids.getIds());
+    public Result deleteBatch(@RequestBody List<Integer> ids) {
+        businessService.deleteBatch(ids);
         return Result.success();
+    }
+
+    /**
+     * 分页条件查询
+     */
+    @GetMapping("/selectPage")
+    public Result selectPage(Business business,
+                             @RequestParam(defaultValue = "1") Integer pageNum,
+                             @RequestParam(defaultValue = "10") Integer pageSize) {
+        PageInfo<Business> pageInfo = businessService.selectPage(business, pageNum, pageSize);
+        return Result.success(pageInfo);
     }
 
 }

@@ -28,7 +28,7 @@ public class BusinessService {
     }
 
     /**
-     * 根据ID查询
+     * 根据ID 单个查询
      */
     public Business selectById(Integer id) {
         Business params = new Business();
@@ -36,7 +36,9 @@ public class BusinessService {
         List<Business> list = this.selectAll(params);
         return list.isEmpty() ? null : list.get(0);
     }
-/**添加商家*/
+    /**
+     * 添加商家
+     */
     public void add(Business business) {
         Business dbbusiness1 = this.selectById(business.getId());
         Business dbbusiness2 = this.selectByUsername(business.getUsername());

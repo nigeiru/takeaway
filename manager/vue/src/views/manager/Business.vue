@@ -180,7 +180,7 @@ export default {
         if (valid) {
           this.$request({
             url: this.form.id ? '/business/update' : '/business/add',
-            method: this.form.id ? 'PUT' : 'POST',
+            method:'POST',
             data: this.form
           }).then(res => {
             if (res.code === '200') {  // 表示成功保存
@@ -196,7 +196,7 @@ export default {
     },
     del(id) {   // 单个删除
       this.$confirm('您确定删除吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.delete('/business/delete/' + id).then(res => {
+        this.$request.post('/business/delete/' + id).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)
@@ -216,7 +216,7 @@ export default {
         return
       }
       this.$confirm('您确定批量删除这些数据吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.delete('/business/delete/batch', {data: this.ids}).then(res => {
+        this.$request.post('/business/delete/batch', {data: this.ids}).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)
