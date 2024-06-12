@@ -2,7 +2,7 @@
   <div>
     <div class="search">
       <el-input placeholder="请输入账号查询" style="width: 200px" v-model="username"></el-input>
-      <el-input placeholder="请输入商家名称" style="width: 200px; margin-left: 10px" v-model="name"></el-input>
+      <el-input placeholder="请输入名称" style="width: 200px; margin-left: 10px" v-model="name"></el-input>
       <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
       <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
@@ -18,7 +18,7 @@
         <el-table-column prop="id" label="序号" width="70" align="center" sortable></el-table-column>
         <el-table-column prop="username" label="账号"></el-table-column>
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column label="Logo">
+        <el-table-column label="头像">
           <template v-slot="scope">
             <div style="display: flex; align-items: center">
               <el-image style="width: 40px; height: 40px; border-radius: 50%" v-if="scope.row.avatar"
@@ -27,20 +27,8 @@
           </template>
         </el-table-column>
         <el-table-column prop="role" label="角色"></el-table-column>
+        <el-table-column prop="sex" label="性别"></el-table-column>
         <el-table-column prop="phone" label="电话"></el-table-column>
-        <el-table-column prop="info" label="简介"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-        <el-table-column prop="license" label="营业执照">
-          <template v-slot="scope">
-            <div style="display: flex; align-items: center">
-              <el-image style="width: 40px; height: 40px;" v-if="scope.row.license"
-                        :src="scope.row.license" :preview-src-list="[scope.row.license]"></el-image>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="审核状态"></el-table-column>
-        <el-table-column prop="timeRange" label="营业时间"></el-table-column>
-        <el-table-column prop="type" label="简介"></el-table-column>
         <el-table-column label="操作" align="center" width="180">
           <template v-slot="scope">
             <el-button size="mini" type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
@@ -63,13 +51,8 @@
     </div>
 
 
-    <el-dialog title="商家" :visible.sync="fromVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
+    <el-dialog title="用户" :visible.sync="fromVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
       <el-form :model="form" label-width="100px" style="padding-right: 50px" :rules="rules" ref="formRef">
-        <el-form-item label="审核状态" prop="status">
-          <el-select style="width: 100%" v-model="form.status">
-            <el-option v-for="item in ['待审核', '通过', '拒绝']" :key="item" :value="item" :label="item"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="账号" prop="username">
           <el-input v-model="form.username" placeholder="账号"></el-input>
         </el-form-item>
@@ -79,24 +62,7 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="名称"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="form.phone" placeholder="电话"></el-input>
-        </el-form-item>
-        <el-form-item label="简介" prop="info">
-          <el-input v-model="form.info" placeholder="简介"></el-input>
-        </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" placeholder="地址"></el-input>
-        </el-form-item>
-        <el-form-item label="营业时间" prop="timeRange">
-          <el-input v-model="form.timeRange" placeholder="营业时间"></el-input>
-        </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-select style="width: 100%" v-model="form.type">
-            <el-option v-for="item in ['奶茶饮品', '轻食简餐', '炸鸡汉堡', '特色美味']" :key="item" :value="item" :label="item"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Logo">
+        <el-form-item label="avatar">
           <el-upload
               class="avatar-uploader"
               :action="$baseUrl + '/files/upload'"
@@ -105,20 +71,17 @@
               list-type="picture"
               :on-success="handleAvatarSuccess"
           >
-            <el-button type="primary">上传Logo</el-button>
+            <el-button type="primary">上传头像</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item label="营业执照">
-          <el-upload
-              class="avatar-uploader"
-              :action="$baseUrl + '/files/upload'"
-              :headers="{ token: user.token }"
-              :file-list="form.license? [form.license] : []"
-              list-type="picture"
-              :on-success="handleLicenseSuccess"
-          >
-            <el-button type="primary">上传营业执照</el-button>
-          </el-upload>
+        <el-form-item label="性别" prop="sex">
+          <el-radio-group v-model="form.sex">
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="form.phone" placeholder="电话"></el-input>
         </el-form-item>
       </el-form>
 
@@ -134,7 +97,7 @@
 
 <script>
 export default {
-  name: "Business",
+  name: "User",
   data() {
     return {
       tableData: [],  // 所有的数据
@@ -156,9 +119,6 @@ export default {
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'},
         ],
-        type: [
-          {required: true, message: '请选择商家类型', trigger: 'blur'},
-        ]
       },
       ids: []
     }
@@ -179,7 +139,7 @@ export default {
       this.$refs.formRef.validate((valid) => {
         if (valid) {
           this.$request({
-            url: this.form.id ? '/business/update' : '/business/add',
+            url: this.form.id ? '/user/update' : '/user/add',
             method:'POST',
             data: this.form
           }).then(res => {
@@ -196,7 +156,7 @@ export default {
     },
     del(id) {   // 单个删除
       this.$confirm('您确定删除吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.post('/business/delete/',id).then(res => {
+        this.$request.post('/user/delete/',id).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)
@@ -216,7 +176,7 @@ export default {
         return
       }
       this.$confirm('您确定批量删除这些数据吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.post('/business/delete/batch', this.ids).then(res => {
+        this.$request.post('/user/delete/batch', this.ids).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)
@@ -229,7 +189,7 @@ export default {
     },
     load(pageNum) {  // 分页查询
       if (pageNum) this.pageNum = pageNum
-      this.$request.get('/business/selectPage', {
+      this.$request.get('/user/selectPage', {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,

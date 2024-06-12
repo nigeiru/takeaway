@@ -3,16 +3,14 @@ package com.example.controller;
 import com.example.common.Result;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.entity.Business;
-import com.example.entity.Ids;
+
 import com.example.exception.CustomException;
 import com.example.service.BusinessService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/business")
@@ -41,16 +39,6 @@ public class BusinessController {
     }
 
     /**
-     * 查询所有商家
-     */
-    @GetMapping("/selectAll")
-    public Result selectAll(Business business,
-                            @RequestParam(defaultValue = "1") Integer pageNum,
-                            @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageInfo<Business> pageInfo = businessService.selectPage(business, pageNum, pageSize);
-        return Result.success(pageInfo);
-    }
-    /**
      * 根据单个ID查询商家
      */
     @GetMapping("/selectById")
@@ -63,7 +51,7 @@ public class BusinessController {
      * 删除商家
      */
     @PostMapping("/delete")
-    public Result delete(@RequestBody Integer id) {
+    public Result delete(@RequestBody int id) {
         businessService.deleteById(id);
         return Result.success();
     }
@@ -73,6 +61,7 @@ public class BusinessController {
      */
     @PostMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
+        System.out.println("这是接收到的删除id列表"+ids);
         businessService.deleteBatch(ids);
         return Result.success();
     }
