@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class Business {
+public class Business extends Account {
     private Integer id;
     private String username;
     private String password;

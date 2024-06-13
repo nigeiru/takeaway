@@ -1,7 +1,10 @@
 package com.example.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.common.Result;
 import com.example.common.enums.ResultCodeEnum;
+import com.example.common.enums.RoleEnum;
+import com.example.entity.Account;
 import com.example.entity.Business;
 
 import com.example.exception.CustomException;
@@ -75,6 +78,23 @@ public class BusinessController {
                              @RequestParam(defaultValue = "10") Integer pageSize) {
         PageInfo<Business> pageInfo = businessService.selectPage(business, pageNum, pageSize);
         return Result.success(pageInfo);
+    }
+
+    /**
+     * 登录
+     */
+    @PostMapping("/login")
+    public Result login(@RequestBody Account account) {
+        if (ObjectUtil.isEmpty(account.getUsername()) || ObjectUtil.isEmpty(account.getPassword())
+                || ObjectUtil.isEmpty(account.getRole())) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        if (RoleEnum.ADMIN.name().equals(account.getRole())) {
+            account =businessService.login(account);
+        } else if (RoleEnum.BUSINESS.name().equals(account.getRole())) {
+            account = businessService.login(account);
+        }
+        return Result.success(account);
     }
 
 }
