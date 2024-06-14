@@ -74,6 +74,9 @@ public class WebController {
         if (RoleEnum.ADMIN.name().equals(account.getRole())) {
             adminService.updatePassword(account);
         }
+        if (RoleEnum.BUSINESS.name().equals(account.getRole())) {
+            businessService.updatePassword(account); // 这是非静态方法，不能通过类名直接调用
+        }
         return Result.success();
     }
 

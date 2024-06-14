@@ -38,7 +38,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="审核状态"></el-table-column>
+        <el-table-column prop="status" label="审核状态">
+          <template v-slot="scope">
+            <el-tag v-if="scope.row.status === '待审核'" type="info">待审核</el-tag>
+            <el-tag v-if="scope.row.status === '通过'" type="success">通过</el-tag>
+            <el-tag v-if="scope.row.status === '拒绝'" type="warning">拒绝</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="timeRange" label="营业时间"></el-table-column>
         <el-table-column prop="type" label="简介"></el-table-column>
         <el-table-column label="操作" align="center" width="180">

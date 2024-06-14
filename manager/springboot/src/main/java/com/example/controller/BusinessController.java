@@ -76,8 +76,17 @@ public class BusinessController {
     public Result selectPage(Business business,
                              @RequestParam(defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "10") Integer pageSize) {
+
         PageInfo<Business> pageInfo = businessService.selectPage(business, pageNum, pageSize);
         return Result.success(pageInfo);
+    }
+    /**
+     * 查询所有商家
+     */
+    @GetMapping("/selectAll")
+    public Result selectAll(Business business) {
+        List<Business> list = businessService.selectAll(business);
+        return Result.success(list);
     }
 
     /**

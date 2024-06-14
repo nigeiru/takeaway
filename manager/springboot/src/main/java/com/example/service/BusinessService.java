@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
+import com.example.entity.Admin;
 import com.example.entity.Business;
 import com.example.exception.CustomException;
 import com.example.mapper.BusinessMapper;
@@ -20,6 +21,21 @@ import java.util.Objects;
 public class BusinessService {
     @Resource
     BusinessMapper businessMapper;
+
+    /**
+     * 修改密码
+     */
+    public void updatePassword(Account account) {
+        Business dbBusiness = this.selectByUsername(account.getUsername());
+        if (ObjectUtil.isNull(dbBusiness)) {
+            throw new CustomException(ResultCodeEnum.USER_NOT_EXIST_ERROR);
+        }
+        if (!account.getPassword().equals(dbBusiness.getPassword())) {
+            throw new CustomException(ResultCodeEnum.PARAM_PASSWORD_ERROR);
+        }
+        dbBusiness.setPassword(account.getNewPassword());
+        this.updateById(dbBusiness);
+    }
 
     /**
      * 商家登录
@@ -131,5 +147,18 @@ public class BusinessService {
         Business business = new Business();
         BeanUtils.copyProperties(account, business);
         this.add(business);
+    }
+
+    /**
+     * 检查商家的权限  看看是否可以新增数据
+     */
+    public void checkBusinessAuth() {
+        Account currentUser = TokenUtils.getCurrentUser();  // 获取当前的用户信息
+        if (RoleEnum.BUSINESS.name().equals(currentUser.getRole())) {   // 如果是商家 的话
+            Business business = selectById(currentUser.getId());
+            if (!"通过".equals(business.getStatus())) {   // 未审核通过的商家  不允许添加数据
+                throw new CustomException(ResultCodeEnum.NO_AUTH);
+            }
+        }
     }
 }
