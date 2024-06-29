@@ -1,6 +1,5 @@
 package com.example.service;
 
-
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Category;
@@ -8,86 +7,87 @@ import com.example.mapper.CategoryMapper;
 import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+/**
+ * 商品分类业务处理
+ **/
 @Service
 public class CategoryService {
+
     @Resource
-    CategoryMapper categoryMapper;
-    BusinessService BusinessService;
-
+    private CategoryMapper categoryMapper;
+    @Resource
+    private BusinessService businessService;
 
     /**
-     * 根据ID 单个查询
-     */
-    public Category selectById(Integer id) {
-        Category params = new Category();
-        params.setId(id);
-        List<Category> list = this.selectAll(params);
-        return list.isEmpty() ? null : list.get(0);
-    }
-    /**
-     * 添加分类
+     * 新增
      */
     public void add(Category category) {
-        BusinessService.checkBusinessAuth();
-        Account currentAccount = TokenUtils.getCurrentUser();
-        if (RoleEnum.BUSINESS.name().equals(currentAccount.getRole())){
-            category.setBusinessId(currentAccount.getId());
-        }
+        businessService.checkBusinessAuth();
+        category.setBusinessId(TokenUtils.getCurrentUser().getId());
         categoryMapper.insert(category);
     }
 
     /**
-     * 查找全部分类
+     * 删除
      */
-    public List<Category> selectAll(Category category)
-    {
-        Account currentAccount = TokenUtils.getCurrentUser();
-        if (currentAccount.getRole().equals("BUSINESS")){
-            category.setBusinessId(currentAccount.getId());
+    public void deleteById(Integer id) {
+        businessService.checkBusinessAuth();
+        categoryMapper.deleteById(id);
+    }
+
+    /**
+     * 批量删除
+     */
+    public void deleteBatch(List<Integer> ids) {
+        businessService.checkBusinessAuth();
+        for (Integer id : ids) {
+            categoryMapper.deleteById(id);
+        }
+    }
+
+    /**
+     * 修改
+     */
+    public void updateById(Category category) {
+        businessService.checkBusinessAuth();
+        categoryMapper.updateById(category);
+    }
+
+    /**
+     * 根据ID查询
+     */
+    public Category selectById(Integer id) {
+        return categoryMapper.selectById(id);
+    }
+
+    /**
+     * 查询所有
+     */
+    public List<Category> selectAll(Category category) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        String role = currentUser.getRole();
+        if (RoleEnum.BUSINESS.name().equals(role)) {
+            category.setBusinessId(currentUser.getId());
         }
         return categoryMapper.selectAll(category);
     }
 
     /**
-     * 修改分类
-     */
-    public void updateById(Category category) {
-        BusinessService.checkBusinessAuth();
-        categoryMapper.updateById(category);
-    }
-
-    /**
-     * 单个删除
-     */
-    public void deleteById(Integer id) {
-        BusinessService.checkBusinessAuth();
-        categoryMapper.deleteById(id);
-    }
-    /**
-     * 批量删除
-     */
-    public void deleteBatch(List<Integer> ids) {
-        BusinessService.checkBusinessAuth();
-        for (Integer id : ids) { // 增强for循环遍历所有ID
-            this.deleteById(id); // 调用删除单个ID的方法
-        }
-    }
-
-    /**
-     * 分页条件查询
+     * 分页查询
      */
     public PageInfo<Category> selectPage(Category category, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        Account currentAccount = TokenUtils.getCurrentUser();
-        if (currentAccount.getRole().equals("BUSINESS")){
-            category.setBusinessId(currentAccount.getId());
+        Account currentUser = TokenUtils.getCurrentUser();
+        String role = currentUser.getRole();
+        if (RoleEnum.BUSINESS.name().equals(role)) {
+            category.setBusinessId(currentUser.getId());
         }
+        PageHelper.startPage(pageNum, pageSize);
         List<Category> list = categoryMapper.selectAll(category);
         return PageInfo.of(list);
     }
-    
+
 }

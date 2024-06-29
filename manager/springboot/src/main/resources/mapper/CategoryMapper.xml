@@ -16,10 +16,11 @@
         <where>
             <if test="id != null"> and category.id = #{id}</if>
             <if test="name != null"> and category.name like concat('%', #{name}, '%')</if>
-            <if test="businessId != null"> and category.business_id = #{businessId}</if>
+            <if test="businessId != null"> and  category.business_id = #{businessId}</if>
         </where>
         order by id desc
     </select>
+
 
     <select id="selectById" resultType="com.example.entity.Category">
         select

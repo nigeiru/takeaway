@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * 商品分类前端操作接口
+ **/
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
 
     @Resource
     private CategoryService categoryService;
+
     /**
-     * 添加分类
+     * 新增
      */
     @PostMapping("/add")
     public Result add(@RequestBody Category category) {
@@ -24,28 +28,10 @@ public class CategoryController {
     }
 
     /**
-     * 修改分类
-     */
-    @PostMapping("/update")
-    public Result update(@RequestBody Category category) {
-        categoryService.updateById(category);
-        return Result.success();
-    }
-
-    /**
-     * 根据单个ID查询分类
-     */
-    @GetMapping("/selectById")
-    public Result selectAll(Integer id) {
-        Category category = categoryService.selectById(id);
-        return Result.success(category);
-    }
-
-    /**
-     * 删除分类
+     * 删除
      */
     @PostMapping("/delete")
-    public Result delete(@RequestBody int id) {
+    public Result deleteById(@RequestBody Integer id) {
         categoryService.deleteById(id);
         return Result.success();
     }
@@ -55,22 +41,46 @@ public class CategoryController {
      */
     @PostMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
-        System.out.println("这是接收到的删除id列表"+ids);
         categoryService.deleteBatch(ids);
         return Result.success();
     }
 
     /**
-     * 分页条件查询
+     * 修改
+     */
+    @PostMapping("/update")
+    public Result updateById(@RequestBody Category category) {
+        categoryService.updateById(category);
+        return Result.success();
+    }
+
+    /**
+     * 根据ID查询
+     */
+    @GetMapping("/selectById/{id}")
+    public Result selectById(@PathVariable Integer id) {
+        Category category = categoryService.selectById(id);
+        return Result.success(category);
+    }
+
+    /**
+     * 查询所有
+     */
+    @GetMapping("/selectAll")
+    public Result selectAll(Category category ) {
+        List<Category> list = categoryService.selectAll(category);
+        return Result.success(list);
+    }
+
+    /**
+     * 分页查询
      */
     @GetMapping("/selectPage")
     public Result selectPage(Category category,
                              @RequestParam(defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageInfo<Category> pageInfo = categoryService.selectPage(category, pageNum, pageSize);
-        return Result.success(pageInfo);
+        PageInfo<Category> page = categoryService.selectPage(category, pageNum, pageSize);
+        return Result.success(page);
     }
-
-
 
 }

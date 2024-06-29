@@ -86,9 +86,10 @@ export default {
   },
   created() {
     this.load(1)
+
     this.$request.get('/business/selectAll', {
       params: {
-        status: "通过"
+        status: '通过'
       }
     }).then(res => {
       this.businessList = res.data || []
@@ -111,7 +112,6 @@ export default {
             method: this.form.id ? 'POST' : 'POST',
             data: this.form
           }).then(res => {
-            console.log(this.form)
             if (res.code === '200') {  // 表示成功保存
               this.$message.success('保存成功')
               this.load(1)
@@ -125,7 +125,7 @@ export default {
     },
     del(id) {   // 单个删除
       this.$confirm('您确定删除吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.delete('/category/delete/' + id).then(res => {
+        this.$request.post('/category/delete/' + id).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)
@@ -145,7 +145,7 @@ export default {
         return
       }
       this.$confirm('您确定批量删除这些数据吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.delete('/category/delete/batch', {data: this.ids}).then(res => {
+        this.$request.post('/category/delete/batch', {data: this.ids}).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)
