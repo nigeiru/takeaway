@@ -9,8 +9,12 @@
 
     <select id="selectAll" resultType="com.example.entity.Goods">
         select
-        <include refid="Base_Column_List" />
+        goods.*,
+        business.name as businessName,
+        category.name as categoryName
         from goods
+        LEFT JOIN business ON goods.business_id = business.id
+        LEFT JOIN category ON goods.category_id = category.id
         <where>
             <if test="id != null"> and goods.id = #{id}</if>
             <if test="name != null"> and goods.name like concat('%', #{name}, '%')</if>
@@ -19,6 +23,7 @@
         </where>
         order by id desc
     </select>
+
 
     <select id="selectById" resultType="com.example.entity.Goods">
         select

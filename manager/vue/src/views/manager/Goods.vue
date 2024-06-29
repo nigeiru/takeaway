@@ -37,7 +37,7 @@
             <el-tag type="warning" v-if="scope.row.status === '下架'">下架</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="businessName" label="商家"></el-table-column>
+        <el-table-column prop="businessName" label="商家" v-if="user.role === 'ADMIN'"></el-table-column>
         <el-table-column prop="categoryName" label="分类"></el-table-column>
         <el-table-column label="操作" align="center" width="180">
           <template v-slot="scope">
@@ -172,7 +172,7 @@ export default {
         if (valid) {
           this.$request({
             url: this.form.id ? '/goods/update' : '/goods/add',
-            method: this.form.id ? 'PUT' : 'POST',
+            method: this.form.id ? 'POST' : 'POST',
             data: this.form
           }).then(res => {
             if (res.code === '200') {  // 表示成功保存
@@ -188,7 +188,7 @@ export default {
     },
     del(id) {   // 单个删除
       this.$confirm('您确定删除吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.delete('/goods/delete/' + id).then(res => {
+        this.$request.post('/goods/delete/' + id).then(res => {
           if (res.code === '200') {   // 表示操作成功
             this.$message.success('操作成功')
             this.load(1)

@@ -87,12 +87,13 @@ export default {
   created() {
     this.load(1)
 
-    this.$request.get('/business/selectAll', {
+    let businessId = this.user.role === 'ADMIN' ? null : this.user.id
+    this.$request.get('/category/selectAll', {
       params: {
-        status: '通过'
+        businessId: businessId
       }
     }).then(res => {
-      this.businessList = res.data || []
+      this.categoryList = res.data
     })
   },
   methods: {

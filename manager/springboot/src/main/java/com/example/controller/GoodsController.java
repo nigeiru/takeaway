@@ -30,8 +30,8 @@ public class GoodsController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete/{id}")
-    public Result deleteById(@PathVariable Integer id) {
+    @PostMapping("/delete")
+    public Result deleteById(@RequestBody Integer id) {
         goodsService.deleteById(id);
         return Result.success();
     }
@@ -39,7 +39,7 @@ public class GoodsController {
     /**
      * 批量删除
      */
-    @DeleteMapping("/delete/batch")
+    @PostMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         goodsService.deleteBatch(ids);
         return Result.success();
@@ -48,7 +48,7 @@ public class GoodsController {
     /**
      * 修改
      */
-    @PutMapping("/update")
+    @PostMapping("/update")
     public Result updateById(@RequestBody Goods goods) {
         goodsService.updateById(goods);
         return Result.success();
@@ -57,8 +57,8 @@ public class GoodsController {
     /**
      * 根据ID查询
      */
-    @GetMapping("/selectById/{id}")
-    public Result selectById(@PathVariable Integer id) {
+    @GetMapping("/selectById")
+    public Result selectById(@RequestBody Integer id) {
         Goods goods = goodsService.selectById(id);
         return Result.success(goods);
     }

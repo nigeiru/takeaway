@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.common.enums.RoleEnum;
-import com.example.entity.Account;
 import com.example.entity.Goods;
 import com.example.mapper.GoodsMapper;
 import com.example.utils.TokenUtils;
@@ -20,6 +19,7 @@ public class GoodsService {
 
     @Resource
     private GoodsMapper goodsMapper;
+    @Resource
     private BusinessService businessService;
 
     /**
@@ -28,6 +28,7 @@ public class GoodsService {
     public void add(Goods goods) {
         // 校验权限
         businessService.checkBusinessAuth();
+        goods.setBusinessId(TokenUtils.getCurrentUser().getId());
         goodsMapper.insert(goods);
     }
 
@@ -35,7 +36,6 @@ public class GoodsService {
      * 删除
      */
     public void deleteById(Integer id) {
-        businessService.checkBusinessAuth();
         goodsMapper.deleteById(id);
     }
 
@@ -43,7 +43,6 @@ public class GoodsService {
      * 批量删除
      */
     public void deleteBatch(List<Integer> ids) {
-        businessService.checkBusinessAuth();
         for (Integer id : ids) {
             goodsMapper.deleteById(id);
         }
@@ -53,7 +52,6 @@ public class GoodsService {
      * 修改
      */
     public void updateById(Goods goods) {
-        businessService.checkBusinessAuth();
         goodsMapper.updateById(goods);
     }
 
@@ -75,11 +73,9 @@ public class GoodsService {
      * 分页查询
      */
     public PageInfo<Goods> selectPage(Goods goods, Integer pageNum, Integer pageSize) {
-        // 拿到当前的登录用户信息
-        Account currentUser = TokenUtils.getCurrentUser();
-        String role = currentUser.getRole();
-        if (RoleEnum.BUSINESS.name().equals(role)) {  // 如果是商家的话   只能查询自己的数据
-            goods.setBusinessId(currentUser.getId());  // 设置商家自己的Id作为查询条件
+        String role = TokenUtils.getCurrentUser().getRole();
+        if (RoleEnum.BUSINESS.name().equals(role)){
+            goods.setBusinessId(businessService.selectById(TokenUtils.getCurrentUser().getId()).getId());
         }
         PageHelper.startPage(pageNum, pageSize);
         List<Goods> list = goodsMapper.selectAll(goods);

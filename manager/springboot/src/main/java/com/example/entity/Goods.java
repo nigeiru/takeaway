@@ -31,5 +31,7 @@ public class Goods {
     private Integer businessId;
     /** 分类ID */
     private Integer categoryId;
+    private String categoryName;
+    private String businessName;
 
 }
