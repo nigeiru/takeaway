@@ -47,6 +47,9 @@
             <el-menu-item index="/goods">商品信息</el-menu-item>
             <el-menu-item index="/banner" v-if="user.role === 'ADMIN'">广告信息</el-menu-item>
             <el-menu-item index="/orders">订单信息</el-menu-item>
+            <el-menu-item index="/collect">店铺收藏信息</el-menu-item>
+            <el-menu-item index="/comment">评论信息</el-menu-item>
+
           </el-submenu>
 
           <el-submenu index="user" v-if="user.role === 'ADMIN'">

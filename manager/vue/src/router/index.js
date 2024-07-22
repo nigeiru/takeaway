@@ -29,6 +29,8 @@ const routes = [
       { path: 'goods', name: 'Goods', meta: { name: '商品信息' }, component: () => import('../views/manager/Goods') },
       { path: 'banner', name: 'Banner', meta: { name: '轮播图' }, component: () => import('../views/manager/Banner.vue') },
       { path: 'orders', name: 'Orders', meta: { name: '订单信息' }, component: () => import('../views/manager/Orders.vue') },
+      { path: 'collect', name: 'Collect', meta: { name: '店铺收藏信息' }, component: () => import('../views/manager/Collect.vue') },
+      { path: 'comment', name: 'Comment', meta: { name: '评价信息' }, component: () => import('../views/manager/Comment.vue') },
 
 
 
