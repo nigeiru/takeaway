@@ -1,0 +1,8 @@
+* {
+	box-sizing: content-box;
+}
+page {
+	min-height: 100vh;  
+	background-color: #fdfdfd;
+	font-size: 24rpx;
+}

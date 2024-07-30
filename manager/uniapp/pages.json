@@ -1,0 +1,76 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+		
+			}
+		},
+		{
+			"path" : "pages/orders/orders",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/me/me",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		}
+	],
+	"globalStyle": {
+	  // 导航栏标题颜色及状态栏前景颜色，仅支持 black/white
+	  "navigationBarTextStyle": "black",
+	  // 导航栏标题文字内容
+	  "navigationBarTitleText": "考拉外卖",
+	  // 导航栏背景颜色（同状态栏背景色）
+	  "navigationBarBackgroundColor": "#ffd100",
+	  //  下拉显示出来的窗口的背景色
+	  "backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+	    "selectedColor": "#ffd100",
+	    "color": "#666",
+	    "list": [
+	      {
+	        "pagePath": "pages/index/index",   // 菜单路径
+	        "text": "首页",
+	        "iconPath": "static/icons/home.png",   // 默认图标
+	        "selectedIconPath": "static/icons/home-active.png"  // 高亮图标
+	      },
+	      {
+	        "pagePath": "pages/orders/orders",
+	        "text": "订单",
+	        "iconPath": "static/icons/orders.png",
+	        "selectedIconPath": "static/icons/orders-active.png"
+	      },
+	      {
+	        "pagePath": "pages/me/me",
+	        "text": "我的",
+	        "iconPath": "static/icons/me.png",
+	        "selectedIconPath": "static/icons/me-active.png"
+	      }
+	    ]
+	},
+	"uniIdRouter": {},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
+}
