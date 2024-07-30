@@ -3,11 +3,14 @@ package com.example.service;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
+import com.example.entity.Account;
 import com.example.entity.User;
 import com.example.exception.CustomException;
 import com.example.mapper.UserMapper;
+import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,9 +25,9 @@ public class UserService {
      * 根据账号查询
      */
     public User selectByUsername(String username) {
-        User params = new User();
-        params.setUsername(username);
-        List<User> list = this.selectAll(params);
+        User user = new User();
+        user.setUsername(username);
+        List<User> list = this.selectAll(user);
         return list.isEmpty() ? null : list.get(0);
     }
 
@@ -52,7 +55,7 @@ public class UserService {
         if (dbuser2 != null && ObjectUtil.isNotEmpty(dbuser2) && !Objects.equals(dbuser2.getId(), user.getId())) {
             throw new CustomException(ResultCodeEnum.USER_EXIST_ERROR);
         }
-        user.setRole(RoleEnum.BUSINESS.name());
+        user.setRole(RoleEnum.USER.name());
         userMapper.insert(user);
     }
 
@@ -102,5 +105,28 @@ public class UserService {
         PageHelper.startPage(pageNum, pageSize);
         List<User> list = userMapper.selectAll(user);
         return PageInfo.of(list);
+    }
+
+    /**
+     * 登录
+     */
+    public Account login(Account account) {
+        Account dbUser = selectByUsername(account.getUsername());
+        if (ObjectUtil.isNull(dbUser)) {
+            throw new CustomException(ResultCodeEnum.USER_NOT_EXIST_ERROR);
+        }
+        if (!account.getPassword().equals(dbUser.getPassword())) {   // 比较用户输入密码和数据库密码是否一致
+            throw new CustomException(ResultCodeEnum.USER_ACCOUNT_ERROR);
+        }
+        // 生成token
+        String tokenData = dbUser.getId() + "-" + RoleEnum.USER.name();
+        String token = TokenUtils.createToken(tokenData, dbUser.getPassword());
+        dbUser.setToken(token);
+        return dbUser;
+    }
+    public void register(Account account) {
+        User user = new User();
+        BeanUtils.copyProperties(account, user);
+        this.add(user);
     }
 }

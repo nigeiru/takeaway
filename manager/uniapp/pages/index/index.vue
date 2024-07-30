@@ -2,7 +2,7 @@
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
-			<text class="title">{{title}}，郭永棋</text>
+			<text class="title">{{title}}，{{user.username}}</text>
 		</view>
 	</view>
 </template>
@@ -11,16 +11,27 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				title: 'Hello',
+				user:""
 			}
 		},
 		onLoad() {
-
-		},
+					this.getUser();
+				},
 		methods: {
-
-		}
-	}
+					getUser() {
+						uni.getStorage({
+							key: 'xm-user',
+							success: (res) => {
+								this.user = res.data;
+							},
+							fail: () => {
+								console.log('Failed to get user data');
+							}
+						});
+					}
+				}
+			}
 </script>
 
 <style>
