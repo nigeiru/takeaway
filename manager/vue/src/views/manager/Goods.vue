@@ -77,6 +77,7 @@
               :action="$baseUrl + '/files/upload'"
               :headers="{ token: user.token }"
               :on-success="handleFileSuccess"
+              :show-file-list="true"
           >
             <el-button type="primary">上传</el-button>
           </el-upload>
@@ -187,18 +188,27 @@ export default {
       })
     },
     del(id) {   // 单个删除
-      this.$confirm('您确定删除吗？', '确认删除', {type: "warning"}).then(response => {
-        this.$request.post('/goods/delete/' + id).then(res => {
-          if (res.code === '200') {   // 表示操作成功
-            this.$message.success('操作成功')
-            this.load(1)
-          } else {
-            this.$message.error(res.msg)  // 弹出错误的信息
-          }
-        })
-      }).catch(() => {
-      })
+      this.$confirm('您确定删除吗？', '确认删除', { type: "warning" })
+          .then(() => {
+            // 修正 URL 拼接以匹配后端
+            this.$request.post(`/goods/delete/${id}`)
+                .then(res => {
+                  if (res.code === '200') {   // 表示操作成功
+                    this.$message.success('操作成功');
+                    this.load(1); // 重新加载数据
+                  } else {
+                    this.$message.error(res.msg); // 弹出错误的信息
+                  }
+                })
+                .catch(() => {
+                  this.$message.error('删除失败，请重试'); // 弹出错误信息
+                });
+          })
+          .catch(() => {
+            // 处理取消删除操作的逻辑
+          });
     },
+
     handleSelectionChange(rows) {   // 当前选中的所有的行数据
       this.ids = rows.map(v => v.id)
     },

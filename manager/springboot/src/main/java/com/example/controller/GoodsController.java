@@ -30,11 +30,12 @@ public class GoodsController {
     /**
      * 删除
      */
-    @PostMapping("/delete")
-    public Result deleteById(@RequestBody Integer id) {
+    @PostMapping("/delete/{id}")
+    public Result deleteById(@PathVariable Integer id) {
         goodsService.deleteById(id);
         return Result.success();
     }
+
 
     /**
      * 批量删除

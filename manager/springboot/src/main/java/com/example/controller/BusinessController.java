@@ -44,11 +44,12 @@ public class BusinessController {
     /**
      * 根据单个ID查询商家
      */
-    @GetMapping("/selectById")
-    public Result selectAll(Integer id) {
+    @GetMapping("/selectById/{id}")
+    public Result selectById(@PathVariable Integer id) {
         Business business = businessService.selectById(id);
         return Result.success(business);
     }
+
 
     /**
      * 删除商家

@@ -38,9 +38,10 @@
   </view>
 </view>
 
-<view>
-  <view class="box" v-for="item in businessList" :key="item.id"
-    style="display: flex; grid-gap: 30rpx; margin-bottom: 10rpx;">
+<view >
+  <view class="box" v-for="item in businessList" :key="item.id" 
+  @click="goToDeatil(item.id)"
+	style="display: flex; grid-gap: 30rpx; margin-bottom: 10rpx;">
     <view style="width: 30%;">
       <image :src="item.avatar" style="width: 100%; height: 200rpx; border-radius: 10rpx; display: block;"></image>
     </view>
@@ -85,6 +86,11 @@
 				this.load()
 				},
 		methods: {
+		goToDeatil(businessId) {
+		  uni.navigateTo({
+		    url: '/pages/detail/detail?businessId=' + businessId
+		  })
+		},
 		load() {
 						// 获取轮播图数据
 						this.$request.get('/banner/selectAll').then(res => {

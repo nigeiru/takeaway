@@ -279,7 +279,7 @@ export default {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          businessName: this.businessName,
+          ordersNo: this.ordersNO
         }
       }).then(res => {
         this.tableData = res.data?.list
@@ -287,7 +287,7 @@ export default {
       })
     },
     reset() {
-      this.businessName = null
+      this.ordersNO = null
       this.load(1)
     },
     handleCurrentChange(pageNum) {

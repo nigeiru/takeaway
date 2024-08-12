@@ -3,35 +3,48 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-		
+		"navigationBarTitleText" : "考拉外卖",
+		"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path" : "pages/orders/orders",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+			"navigationBarTitleText" : "订单",
+			"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path" : "pages/me/me",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+			"navigationBarTitleText" : "我的",
+			"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path" : "pages/login/login",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "登录",
+				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path" : "pages/register/register",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationBarTitleText" : "注册",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/detail/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "商家详情",
+				"enablePullDownRefresh": false
 			}
 		}
 	],
