@@ -49,14 +49,13 @@
 		}
 	],
 	"globalStyle": {
+		 "backgroundColor": "#f8f8f8", 
 	  // 导航栏标题颜色及状态栏前景颜色，仅支持 black/white
 	  "navigationBarTextStyle": "black",
 	  // 导航栏标题文字内容
 	  "navigationBarTitleText": "考拉外卖",
 	  // 导航栏背景颜色（同状态栏背景色）
-	  "navigationBarBackgroundColor": "#ffd100",
-	  //  下拉显示出来的窗口的背景色
-	  "backgroundColor": "#F8F8F8"
+	  "navigationBarBackgroundColor": "#ffd100"
 	},
 	"tabBar": {
 	    "selectedColor": "#ffd100",

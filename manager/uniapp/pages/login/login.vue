@@ -7,7 +7,7 @@
 					<uni-easyinput prefixIcon="person" v-model="form.username" placeholder="请输入账号" />
 				</uni-forms-item>
 				<uni-forms-item required name="password">
-					<uni-easyinput prefixIcon="locked" v-model="form.password" placeholder="请输入密码" />
+					<uni-easyinput prefixIcon="locked" type="password"  v-model="form.password" placeholder="请输入密码" />
 				</uni-forms-item>
 				<uni-forms-item style="display: flex; flex-direction: column; align-items: center;">
 					<button @click="login" style="background-color: #ffd100; border-color: #ffd100; height: 70rpx; line-height: 70rpx;">登 录</button>

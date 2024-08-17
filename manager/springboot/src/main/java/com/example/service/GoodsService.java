@@ -9,6 +9,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -58,15 +60,25 @@ public class GoodsService {
     /**
      * 根据ID查询
      */
-    public Goods selectById(Integer id) {
-        return goodsMapper.selectById(id);
+    public  Goods selectById(Integer id) {
+        Goods goods=goodsMapper.selectById(id);
+        wrapGoods(goods);
+        return goods;
     }
 
     /**
      * 查询所有
      */
     public List<Goods> selectAll(Goods goods) {
-        return goodsMapper.selectAll(goods);
+        String role = TokenUtils.getCurrentUser().getRole();
+        if (RoleEnum.BUSINESS.name().equals(role)){
+            goods.setBusinessId(businessService.selectById(TokenUtils.getCurrentUser().getId()).getId());
+        }
+        List<Goods> goodsList = goodsMapper.selectAll(goods);
+        for (Goods g : goodsList) {
+            wrapGoods(g);
+        }
+        return goodsList;
     }
 
     /**
@@ -79,7 +91,20 @@ public class GoodsService {
         }
         PageHelper.startPage(pageNum, pageSize);
         List<Goods> list = goodsMapper.selectAll(goods);
+        for (Goods g : list) {
+            wrapGoods(g);
+        }
         return PageInfo.of(list);
     }
-
+    /**
+     * 设置商品额外信息
+     */
+    private Goods wrapGoods(Goods goods) {
+        if (goods == null){
+            return null;
+        }
+        BigDecimal actualPrice = goods.getPrice().multiply(BigDecimal.valueOf(goods.getDiscount())).setScale(2, RoundingMode.UP);
+        goods.setActualPrice(actualPrice);
+        return goods;
+    }
 }

@@ -11,6 +11,8 @@ public class Goods {
     private String name;
     /** 价格 */
     private BigDecimal price;
+    /** 打折后的价格 */
+    private BigDecimal actualPrice;
     /** 图片 */
     private String img;
     /** 描述 */
