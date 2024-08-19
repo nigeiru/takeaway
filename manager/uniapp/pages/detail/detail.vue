@@ -1,10 +1,10 @@
 <template>
 	<view style="padding: 20rpx;">
 		<!-- 商家信息 -->
-		<view class="box" style="display: flex;">
-			<view style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+		<view class="box" style="display: flex; background-color: #fff;border-radius: 10rpx; overflow: hidden;padding-left: 3%;"  >
+			<view style="flex: 1; display: flex; flex-direction: column; justify-content: space-around;">
 				<view style="font-size: 36rpx; font-weight: bold;">{{ business.name || '' }}</view>
-				<view>
+				<view >
 					<text style="padding-right: 10rpx; border-right: 2rpx solid #ccc;">平台配送</text>
 					<text style="padding: 0 10rpx; border-right: 2rpx solid #ccc;">免配送费</text>
 					<text style="padding: 0 10rpx;">30分钟送达</text>
@@ -60,7 +60,7 @@
 									<text class="mini-btn" style="margin-left: 5rpx;">到手价</text>
 								</view>
 								<view>
-									<text class="mini-btn-fill" @click="addCart(item)">选购</text>
+									<text class="mini-btn-fill" @click="addCart(item)">加入购物车</text>
 								</view>
 							</view>
 						</view>
@@ -124,7 +124,7 @@
 				],
 			 buttonGroup: [
 			            {
-			                text: '立即购买',
+			                text: '立即下单',
 			                backgroundColor: 'linear-gradient(90deg, #846c6c, #EF1224)',
 			                color: '#fff',
 			            }
@@ -140,27 +140,26 @@
 			this.loadCart()
 		},
 		methods: {
-			async buttonClick() {
-			  if (this.buttonGroup[0].text === '立即购买') {
-			    // 如果是立即购买，进行购买操作
-			    try {
-			      await this.deleteAll(false); // 传递 false，表示不显示“清除成功”的弹窗
-			      uni.showToast({
-			        icon: 'success',
-			        title: '购买成功'
-			      });
-			    } catch (error) {
-			      // 处理可能的错误情况
-			      console.error(error);
-			      uni.showToast({
-			        icon: 'error',
-			        title: '购买失败'
-			      });
-			    }
-			  } else {
-			    // 其他按钮操作
-			    this.$refs.popup.open('bottom');
+			buttonClick() {
+				if(this.buttonGroup[0].disabled){
+					uni.showToast({
+						icon: 'none',
+						title: '购物车内暂无商品'
+					});
+					return;
+				}
+				
+			  try {
+			    let xmOrders = uni.getStorageSync('xm-orders') || {};
+			    xmOrders.businessId = this.businessId;
+			    uni.setStorageSync('xm-orders', xmOrders);
+			    uni.navigateTo({
+			      url: "/pages/confirm/confirm"
+			    });
+			  } catch (error) {
+			    console.error("An error occurred while setting storage or navigating:", error);
 			  }
+			
 			},
 			handleNumberChange(item) {
 			      // 检查是否减少到了 0
@@ -236,7 +235,7 @@
 							this.$refs.popup.open()
 						},
 			loadCart() {
-				this.$request.get('/cart/selectAll', { userId: this.user.id  }).then(res => {
+				this.$request.get('/cart/selectAll', { userId: this.user.id,businessId:this.businessId  }).then(res => {
 					this.cartList = res.data || []
 					this.options[0].info = this.cartList.length
 					 // 更新按钮禁用状态
@@ -297,6 +296,7 @@
 </script>
 
 <style>
+	 @import "@/static/css/global.css";
 	.category-item {
 		padding: 15rpx;
 		background-color: #eee;

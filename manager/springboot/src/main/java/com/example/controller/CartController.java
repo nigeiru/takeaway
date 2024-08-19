@@ -4,6 +4,7 @@ import com.example.common.Result;
 import com.example.entity.AmountDTO;
 import com.example.entity.Cart;
 import com.example.entity.Goods;
+import com.example.service.BusinessService;
 import com.example.service.CartService;
 import com.example.service.GoodsService;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,7 @@ public class CartController {
     @Resource
     private CartService cartService;
     private GoodsService GoodsService;
+    private BusinessService businessService;
     /**
      * 新增
      */

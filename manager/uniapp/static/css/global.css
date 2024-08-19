@@ -1,9 +1,11 @@
+/* global.css */
 * {
-	box-sizing: content-box;
+    box-sizing: border-box;
 }
+
 page {
-	min-height: 100vh;  
-	background-color: "#f8f8f8";
-	font-size: 24rpx;
-	color: #333;
+    min-height: 100vh;  
+    background-color: #ebebeb;
+    font-size: 24rpx;
+    color: #333;
 }

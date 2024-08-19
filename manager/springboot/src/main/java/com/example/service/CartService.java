@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.AmountDTO;
+import com.example.entity.Business;
 import com.example.entity.Cart;
 import com.example.entity.Goods;
 import com.example.mapper.CartMapper;
@@ -22,7 +23,8 @@ public class CartService {
     private CartMapper cartMapper;
     @Resource
     private GoodsService goodService;
-    private AmountDTO amountDTO;
+    @Resource
+    private BusinessService businessService;
     /**
      * 新增
      */
@@ -68,6 +70,8 @@ public class CartService {
         for (Cart c : cartList){
             Goods goods = goodService.selectById(c.getGoodsId());
             c.setGoods(goods);
+           Business business= businessService.selectById(c.getBusinessId());
+            c.setBusiness(business);
         }
         return cartList;
     }
