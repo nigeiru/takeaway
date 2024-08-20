@@ -79,8 +79,8 @@
 		    <view style="padding: 40rpx 40rpx 140rpx 40rpx;">
 		      <view style="text-align: right; margin-bottom: 10rpx; color: #999;" v-if="cartList.length">
 		        <uni-icons style="position: relative; top: 4rpx;" type="trash" size="16"
-				 color="#999" @click="deleteAll"></uni-icons>
-				 清空
+				 color="#999"  @click="deleteAll"></uni-icons>
+				 <text @click="deleteAll">清空</text>
 			  </view>
 		      <view v-for="(item, index) in cartList" :key="index" style="display: flex; margin-bottom: 20rpx;" v-if="item.goods">
 		        <view style="width: 100rpx; height: 100rpx;">
@@ -134,7 +134,10 @@
 				amount: {}
 			}
 		},
-		onLoad(option) {
+		onShow() {
+			let allPages = getCurrentPages() //获取当前页面栈的实例；
+			let lastPages = allPages.length - 1 // 获得倒数第二个元素的索引；
+			let option = allPages[lastPages].options // 获得上个页面传递的参数；
 			this.businessId = option.businessId
 			this.load()
 			this.loadCart()

@@ -117,4 +117,13 @@ public class CartService {
     public void deleteByGoods(Integer businessID, Integer userId) {
         cartMapper.deleteByGoods(businessID, userId);
     }
+
+    public List<Cart> selectUserCart(Integer userId, Integer businessId) {
+        Cart cart = new Cart();
+        cart.setUserId(userId);
+        cart.setBusinessId(businessId);
+        return this.selectAll(cart);
+
+
+    }
 }

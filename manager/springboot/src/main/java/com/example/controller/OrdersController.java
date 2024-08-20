@@ -6,6 +6,7 @@ import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Orders;
+import com.example.entity.OrdersDTO;
 import com.example.exception.CustomException;
 import com.example.service.OrdersService;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +22,11 @@ public class OrdersController {
 
     @Resource
     private OrdersService ordersService;
+    @PostMapping("/addOrder")
+    public Result addOrder(@RequestBody OrdersDTO orders) {
+        ordersService.addOrder(orders);
+        return Result.success();
+    }
     /**
      * 添加商家
      */
