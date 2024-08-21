@@ -51,11 +51,11 @@
 								<view style="font-size: 32rpx; font-weight: bold;">{{ item.name }}</view>
 								<view style="font-size: 24rpx;">{{ item.descr }}</view>
 								<view>
-									<text class="mini-btn">{{ item.discount }}折</text>
+									<text class="mini-btn">{{ item.discount!=1?item.discount*10+"折":"未有折扣" }}</text>
 									<text style="font-size: 24rpx; margin-left: 10rpx;">已售 30</text>
 								</view>
 								<view>
-									<text style="text-decoration: line-through;">￥{{ item.price }}</text>
+									<text style="text-decoration: line-through;" v-if=" item.discount!=1">￥{{ item.price }}</text>
 									<text style="color: orangered; margin-left: 10rpx;">￥{{ item.actualPrice }}</text>
 									<text class="mini-btn" style="margin-left: 5rpx;">到手价</text>
 								</view>

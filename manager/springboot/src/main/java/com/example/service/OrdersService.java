@@ -43,7 +43,9 @@ public class OrdersService {
      * 删除
      */
     public void deleteById(Integer id) {
+
         ordersMapper.deleteById(id);
+       ordersItemService.deleteByOrderId(id);
     }
 
     /**
@@ -51,7 +53,7 @@ public class OrdersService {
      */
     public void deleteBatch(List<Integer> ids) {
         for (Integer id : ids) {
-            ordersMapper.deleteById(id);
+            this.deleteById(id);
         }
     }
 

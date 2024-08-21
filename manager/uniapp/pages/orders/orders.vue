@@ -1,21 +1,31 @@
 <template>
 	<view>
-		<uni-segmented-control 
+		<uni-segmented-control
 		  :current="current" 
 		  :values="items" 
 		  @clickItem="onClickItem" 
-		  styleType="text" 
-		  activeColor="#ff9900"
-		  backgroundColor="#ffffff"
-		  style="margin: 20rpx 0; border: 1px solid #ccc;">
-		</uni-segmented-control>
-		 <view style="padding: 20rpx;background-color: white;">
-			<view v-if="current === index" v-for="(tab, index) in 4" :key="index">
-				<view class="box" v-for="item in ordersList" :key="item.id" style="margin-bottom: 10rpx;">
-					<view style="display: flex; align-items: baseline; margin-bottom: 10rpx;">
-						<navigator :url="'/pages/detail/detail?businessId=' + item.businessId"
-							style="flex: 1; font-size: 32rpx; ">{{ item.businessName }}  
-							<uni-icons type="right" size="16" color="#666" style="position: relative; top: 2rpx;"></uni-icons>
+		  styleType="button" 
+		  activeColor="#dce214"
+		inActiveColor="#f7f7f7"
+		   style="margin: 50rpx 0; border: 1px solid #ccc;border-radius: 20%;">
+		</uni-segmented-control v-if >
+			<!-- 如果 ordersList 为空，则显示提示信息 -->
+						<view v-if="ordersList.length === 0" style="text-align: center; color: #666; padding: 40rpx;">
+							近六个月未有符合条件的订单
+						</view>
+		 	<view>
+				<view  v-for="item in ordersList" :key="item.id" style="margin-bottom: 30rpx;background: #fff; padding: 20rpx; 0" >
+					<view style="display: flex; align-items: baseline; margin-bottom: 10rpx;"@click="goOrderItem(item.id)">
+						<navigator 
+						  :url="'/pages/detail/detail?businessId=' + item.businessId"
+						  style="flex: 1; font-size: 32rpx; text-decoration: none; background: none;">
+						  {{ item.businessName }}  
+						  <uni-icons 
+						    type="right" 
+						    size="16" 
+						    color="#666" 
+						    style="position: relative; top: 2rpx;">
+						  </uni-icons>
 						</navigator>
 						<view style="font-size: 24rpx; color: #666;">{{ item.status }}</view>
 					</view>
@@ -32,10 +42,10 @@
 							</view>
 						 </view>
 						 <view style="flex: 1; text-align: right;">
-							 <uni-tag v-if="item.status === '待支付'" text="支付" size="mini" type="primary" @click="changeStatus(item, '待发货')"></uni-tag>
-							 <uni-tag v-if="item.status === '待收货'" text="申请退款" size="mini" type="error" style="margin-right: 10rpx;" @click="changeStatus(item, '已退款')"></uni-tag>
+							 <uni-tag v-if="item.status === '未支付'" text="支付" size="mini" type="primary" @click="changeStatus(item, '待发货')"></uni-tag>
+							 <uni-tag v-if="item.status === '待发货'" text="申请退款" size="mini" type="error" style="margin-right: 10rpx;" @click="changeStatus(item, '已退款')"></uni-tag>
 							  <uni-tag v-if="item.status === '待收货'" text="确认收货" size="mini" type="warning" @click="changeStatus(item, '待评价')"></uni-tag>
-							  <uni-tag v-if="item.status === '待评价'" text="评价" size="mini" type="royal"></uni-tag>
+							  <uni-tag v-if="item.status === '待评价'" text="评价" size="mini" type="warning" @click="goComment(item.id)"></uni-tag>
 						 </view>
 					</view>
 				</view>
@@ -58,6 +68,16 @@
 			this.loadOrders()
 		},
 		methods: {
+			goComment(orderId){
+				uni.navigateTo({
+					url:"/pages/comment/comment?orderId="+orderId
+				})
+			},
+			goOrderItem(orderId){
+				uni.navigateTo({
+					url:"/pages/ordersItem/ordersItem?orderId="+orderId
+				})
+			},
 			del(orderId) {
 				this.$request.del('/orders/delete/' + orderId).then(res => {
 					if (res.code === '200') {
@@ -77,7 +97,7 @@
 			changeStatus(orders, status) {
 				let form = JSON.parse(JSON.stringify(orders))
 				form.status = status
-				this.$request.put('/orders/update', form).then(res => {
+				this.$request.post('/orders/update', form).then(res => {
 					if (res.code === '200') {
 					  uni.showToast({
 					    icon: "success",

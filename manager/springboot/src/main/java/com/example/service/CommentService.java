@@ -1,8 +1,11 @@
 package com.example.service;
 
+import cn.hutool.core.date.DateUtil;
+import com.example.common.enums.OrderStatusEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Comment;
+import com.example.entity.Orders;
 import com.example.mapper.CommentMapper;
 import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
@@ -22,12 +25,24 @@ public class CommentService {
     private CommentMapper commentMapper;
     @Resource
     private BusinessService businessService;
+    @Resource
+    private OrdersService orderService;
 
     /**
      * 新增
      */
     public void add(Comment comment) {
         businessService.checkBusinessAuth();
+        comment.setTime(DateUtil.now());
+        Orders orders = orderService.selectById(comment.getOrderId());
+        if (orders!=null){
+            comment.setBusinessId(orders.getBusinessId());
+            orders.setStatus(OrderStatusEnum.DONE.getValue());
+            orderService.updateById(orders);
+
+        }
+        Account currentUser = TokenUtils.getCurrentUser();
+        comment.setUserId(currentUser.getId());
         comment.setBusinessId(TokenUtils.getCurrentUser().getId());
         commentMapper.insert(comment);
     }

@@ -1,16 +1,11 @@
 package com.example.controller;
 
-import cn.hutool.core.util.ObjectUtil;
+
 import com.example.common.Result;
-import com.example.common.enums.ResultCodeEnum;
-import com.example.common.enums.RoleEnum;
-import com.example.entity.Account;
 import com.example.entity.Orders;
 import com.example.entity.OrdersDTO;
-import com.example.exception.CustomException;
 import com.example.service.OrdersService;
 import com.github.pagehelper.PageInfo;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -89,6 +84,9 @@ public class OrdersController {
      */
     @GetMapping("/selectAll")
     public Result selectAll(Orders orders) {
+        System.out.println("接受到的参数"+orders);
+         String status =orders.getStatus();
+
         List<Orders> list = ordersService.selectAll(orders);
         return Result.success(list);
     }

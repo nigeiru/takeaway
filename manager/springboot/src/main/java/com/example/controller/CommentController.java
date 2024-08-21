@@ -1,13 +1,21 @@
 package com.example.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.example.common.Result;
+import com.example.entity.Account;
 import com.example.entity.Comment;
+import com.example.entity.Orders;
 import com.example.service.CommentService;
+import com.example.service.OrdersService;
+import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.annotation.Resources;
 import java.util.List;
+
 
 /**
  * 用户表前端操作接口
@@ -17,11 +25,14 @@ import java.util.List;
 public class CommentController {
 
     @Resource
+    private OrdersService orderService;
+    @Resource
     private CommentService commentService;
 
     /**
      * 新增
      */
+    @Transactional
     @PostMapping("/add")
     public Result add(@RequestBody Comment comment) {
         commentService.add(comment);

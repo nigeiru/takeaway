@@ -10,22 +10,47 @@
     </sql>
 
     <select id="selectAll" resultType="com.example.entity.Orders">
-        select orders.*,business.name as businessName,user.name as userName
+        select orders.*, business.name as businessName, user.name as userName
         from orders
         left join business on orders.business_id = business.id
         left join user on orders.user_id = user.id
         <where>
-            <if test="orderNo != null">and orders.order_no like concat('%', #{orderNo}, '%')</if>
-            <if test="businessId != null">and orders.business_id = #{businessId}</if>
-            <if test="userId != null">and orders.user_id = #{userId}</if>
+            <!-- 根据订单号过滤 -->
+            <if test="orderNo != null and orderNo != ''">
+                and orders.order_no like concat('%', #{orderNo}, '%')
+            </if>
+            <!-- 根据商家ID过滤 -->
+            <if test="businessId != null">
+                and orders.business_id = #{businessId}
+            </if>
+            <!-- 根据用户ID过滤 -->
+            <if test="userId != null">
+                and orders.user_id = #{userId}
+            </if>
+            <!-- 根据订单状态过滤 -->
+            <choose>
+                <!-- 如果状态是“进行中”，则根据多个状态进行过滤 -->
+                <when test="status == '进行中'">
+                    and (orders.status = '待支付' or orders.status = '待发货' or orders.status = '待收货')
+                </when>
+                <!-- 如果状态是“全部”，不加任何状态过滤 -->
+                <when test="status == '全部'">
+                    <!-- 不添加额外的条件 -->
+                </when>
+                <!-- 其他情况则直接根据状态值进行过滤 -->
+                <otherwise>
+                    and orders.status = #{status}
+                </otherwise>
+            </choose>
         </where>
-        order by id desc
+        order by orders.id desc
     </select>
 
+
     <select id="selectById" resultType="com.example.entity.Orders">
-        select
-            *
-        from orders
+        select *,business.name as businessName from orders
+        left join business
+      on business.id = orders.business_id
         where orders.id = #{id}
     </select>
 
