@@ -3,7 +3,13 @@
 		<!-- 商家信息 -->
 		<view class="box" style="display: flex; background-color: #fff;border-radius: 10rpx; overflow: hidden;padding-left: 3%;"  >
 			<view style="flex: 1; display: flex; flex-direction: column; justify-content: space-around;">
-				<view style="font-size: 36rpx; font-weight: bold;">{{ business.name || '' }}</view>
+				<view style="font-size: 36rpx; font-weight: bold;">
+					<text>{{ business.name || '' }}</text>
+					<uni-icons type="star-filled" size="18" color="orange" style="margin-left: 5%;" v-if="business.isCollect" @click="saveCollect"></uni-icons>
+					<uni-icons type="star-filled" size="18" color="#999" style="margin-left: 5%;" v-else @click="saveCollect"></uni-icons>
+					
+				</view>
+				
 				<view >
 					<text style="padding-right: 10rpx; border-right: 2rpx solid #ccc;">平台配送</text>
 					<text style="padding: 0 10rpx; border-right: 2rpx solid #ccc;">免配送费</text>
@@ -143,6 +149,23 @@
 			this.loadCart()
 		},
 		methods: {
+		saveCollect() {
+			
+		  this.$request.post('/collect/saveCollect', { userId: this.user.id, businessId: this.businessId }).then(res => {
+			if (res.code === '200') {
+			  uni.showToast({
+				icon: 'success',
+				title: '操作成功'
+			  })
+			  this.load()
+			} else {
+			  uni.showToast({
+				icon: 'error',
+				title: res.msg
+			  })
+			}
+		  })
+		},
 			buttonClick() {
 				if(this.buttonGroup[0].disabled){
 					uni.showToast({
@@ -276,6 +299,7 @@
 			load() {
 				this.$request.get('/business/selectById/' + this.businessId).then(res => {
 					this.business = res.data || {}
+					console.log(this.business)
 				})
 
 				this.$request.get('/category/selectAll', {

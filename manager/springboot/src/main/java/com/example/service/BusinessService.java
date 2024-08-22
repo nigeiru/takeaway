@@ -6,6 +6,7 @@ import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Admin;
 import com.example.entity.Business;
+import com.example.entity.Collect;
 import com.example.exception.CustomException;
 import com.example.mapper.BusinessMapper;
 import com.example.utils.TokenUtils;
@@ -21,7 +22,8 @@ import java.util.Objects;
 public class BusinessService {
     @Resource
     BusinessMapper businessMapper;
-
+    @Resource
+    CollectService collectorService;
     /**
      * 修改密码
      */
@@ -72,7 +74,13 @@ public class BusinessService {
         Business params = new Business();
         params.setId(id);
         List<Business> list = this.selectAll(params);
-        return list.isEmpty() ? null : list.get(0);
+        Business business=list.size()==0 ? null : list.get(0);
+        if (business!=null){
+            Account currentAccount = TokenUtils.getCurrentUser();
+           Collect collect = collectorService.selectByUserIdAndBusinessId(currentAccount.getId(),id);
+            business.setIsCollect(collect!=null);
+        }
+        return business;
     }
     /**
      * 添加商家

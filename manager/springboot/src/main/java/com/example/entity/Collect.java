@@ -8,6 +8,7 @@ public class Collect {
     private Integer id;
     /** 商家ID */
     private Integer businessId;
+    private Business business;
     /** 商家名称 */
     private String businessName;
     /** 用户ID */
@@ -16,4 +17,5 @@ public class Collect {
     private String userName;
     /** 收藏时间 */
     private String time;
+
 }

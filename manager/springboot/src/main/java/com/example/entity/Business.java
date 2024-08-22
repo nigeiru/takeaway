@@ -18,4 +18,5 @@ public class Business extends Account {
     private String status;
     private String timeRange;
     private String type;
+    private Boolean isCollect;
 }

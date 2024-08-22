@@ -1,7 +1,9 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.entity.Business;
 import com.example.entity.Collect;
+import com.example.service.BusinessService;
 import com.example.service.CollectService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +20,19 @@ public class CollectController {
 
     @Resource
     private CollectService collectService;
-
+    @Resource
+    private BusinessService businessService;
     /**
      * 新增
      */
     @PostMapping("/add")
     public Result add(@RequestBody Collect collect) {
         collectService.add(collect);
+        return Result.success();
+    }
+    @PostMapping("/saveCollect")
+    public Result saveCollect(@RequestBody Collect collect) {
+        collectService.saveCollect(collect);
         return Result.success();
     }
 
@@ -69,8 +77,13 @@ public class CollectController {
      */
     @GetMapping("/selectAll")
     public Result selectAll(Collect collect ) {
-        List<Collect> list = collectService.selectAll(collect);
-        return Result.success(list);
+        List<Collect> collects = collectService.selectAll(collect);
+        for (Collect c:collects) {
+           Business business= businessService.selectById(c.getBusinessId());
+            c.setBusiness(business);
+
+        }
+        return Result.success(collects);
     }
 
     /**

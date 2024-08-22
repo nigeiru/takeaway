@@ -1,5 +1,6 @@
 package com.example.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Collect;
@@ -28,7 +29,6 @@ public class CollectService {
      */
     public void add(Collect collect) {
         businessService.checkBusinessAuth();
-        collect.setBusinessId(TokenUtils.getCurrentUser().getId());
         collectMapper.insert(collect);
     }
 
@@ -91,4 +91,20 @@ public class CollectService {
         return PageInfo.of(list);
     }
 
+    public Collect selectByUserIdAndBusinessId(Integer userId, Integer businessId) {
+
+        return collectMapper.selectByUserIdAndBusinessId(userId, businessId);
+
+    }
+
+    public void saveCollect(Collect collect) {
+        Collect dbCollect = this.selectByUserIdAndBusinessId(collect.getUserId(), collect.getBusinessId());
+        if (dbCollect != null) {  // 说明收藏过了
+            this.deleteById(dbCollect.getId());  //删除收藏
+        } else {
+            // 新的收藏
+            collect.setTime(DateUtil.now());
+            this.add(collect);
+        }
+    }
 }
