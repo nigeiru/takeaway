@@ -10,7 +10,7 @@
 
     <select id="selectAll" resultType="com.example.entity.Comment">
         select
-        comment.*, user.name as userName, business.name as businessName, orders.order_no as orderNo,orders.name as orderName
+        comment.*, user.name as userName,user.avatar as userAvatar, business.name as businessName, orders.order_no as orderNo,orders.name as orderName
         from comment
         left join user
         on comment.user_id = user.id

@@ -20,6 +20,7 @@ public class Comment implements Serializable {
     private Integer userId;
     /** 用户名称 */
     private String userName;
+    private String userAvatar;
     /** 商家iD */
     private Integer businessId;
     /** 商家名称 */

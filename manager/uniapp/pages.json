@@ -98,6 +98,13 @@
 			{
 				"navigationBarTitleText" : "评论中心"
 			}
+		},
+		{
+			"path" : "pages/search/search",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	],
 	"globalStyle": {

@@ -50,6 +50,7 @@ public class UserController {
      */
     @PostMapping("/update")
     public Result updateById(@RequestBody User user) {
+        System.out.println("这是需要更新的用户信息"+user);
         userService.updateById(user);
         return Result.success();
     }

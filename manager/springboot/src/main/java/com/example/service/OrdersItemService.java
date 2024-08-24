@@ -76,4 +76,8 @@ public class OrdersItemService {
     public void deleteByOrderId(Integer orderId) {
         ordersItemMapper.deleteByOrderId(orderId);
     }
+
+    public List<OrdersItem> selectByOrderId(Integer id) {
+        return ordersItemMapper.selectByOrderId(id);
+    }
 }

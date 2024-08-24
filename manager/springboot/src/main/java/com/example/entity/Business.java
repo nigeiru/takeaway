@@ -19,4 +19,6 @@ public class Business extends Account {
     private String timeRange;
     private String type;
     private Boolean isCollect;
+    private Double score;
+    private Integer nums;
 }

@@ -158,4 +158,8 @@ public class OrdersService {
         // 清空购物车
         cartService.deleteByBusiness(businessId, userId);
     }
+
+    public List<Orders> selectUsageByBusinessId(Integer id) {
+        return ordersMapper.selectUsageByBusinessId(id);
+    }
 }

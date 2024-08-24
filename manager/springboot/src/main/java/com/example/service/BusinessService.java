@@ -3,10 +3,7 @@ package com.example.service;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
-import com.example.entity.Account;
-import com.example.entity.Admin;
-import com.example.entity.Business;
-import com.example.entity.Collect;
+import com.example.entity.*;
 import com.example.exception.CustomException;
 import com.example.mapper.BusinessMapper;
 import com.example.utils.TokenUtils;
@@ -15,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageInfo;
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +22,12 @@ public class BusinessService {
     BusinessMapper businessMapper;
     @Resource
     CollectService collectorService;
+    @Resource
+    CommentService commentService;
+    @Resource
+    OrdersService ordersService;
+    @Resource
+    OrdersItemService ordersItemService;
     /**
      * 修改密码
      */
@@ -74,7 +78,7 @@ public class BusinessService {
         Business params = new Business();
         params.setId(id);
         List<Business> list = this.selectAll(params);
-        Business business=list.size()==0 ? null : list.get(0);
+        Business business= list.isEmpty() ? null : list.get(0);
         if (business!=null){
             Account currentAccount = TokenUtils.getCurrentUser();
            Collect collect = collectorService.selectByUserIdAndBusinessId(currentAccount.getId(),id);
@@ -105,6 +109,11 @@ public class BusinessService {
      * 查找全部商家
      */
     public List<Business> selectAll(Business business) {
+        List<Business> businesses=businessMapper.selectAll(business);
+        for (Business b :businesses) {
+            wrapBusiness(b);
+
+        }
         return businessMapper.selectAll(business);
     }
 
@@ -169,4 +178,21 @@ public class BusinessService {
             }
         }
     }
+//    private void wrapBusiness(Business b) {
+//        List<Comment> commentList = commentService.selectByBusinessId(b.getId());
+//        double sum = commentList.stream().map(Comment::getStar).reduce(Double::sum).orElse(0D) + 5D;
+//        // 5 + 4.5 / 1 + 1
+//        double score = BigDecimal.valueOf(sum).divide(BigDecimal.valueOf(commentList.size() + 1), 1, BigDecimal.ROUND_UP).doubleValue();
+//        b.setScore(score);
+//
+////        // 查出所有有效的订单
+////        List<Orders> ordersList = ordersService.selectUsageByBusinessId(b.getId());
+////        int nums = 0;
+////        for (Orders orders : ordersList) {
+////            List<OrdersItem> ordersItemList = ordersItemService.selectByOrderId(orders.getId());
+////            // 聚合函数查出订单的商品数量
+////            nums += ordersItemList.stream().map(OrdersItem::getNum).reduce(Integer::sum).orElse(0);
+////        }
+////        b.setNums(nums);
+//    }
 }

@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<uni-search-bar @confirm="search"></uni-search-bar>
 <swiper circular autoplay :interval="3000" :duration="500" indicator-dots style="height: 350rpx;"
   indicator-color="rgba(255, 255, 255, 0.6)" indicator-active-color="#3CB371">
   <swiper-item v-for="item in banners" :key="item.id">
@@ -50,8 +51,8 @@
 
       <view style="display: flex;  color: #666; ">
         <view style="flex: 1;">
-          <text style="color: #ff9800; font-weight: bold;">4.5分</text>
-          <text style="margin-left: 10rpx;">已售30</text>
+          <text style="color: #ff9800; font-weight: bold;">{{item.score}}分</text>
+          <text style="margin-left: 10rpx;">已售{{item.num}}</text>
         </view>
         <view style="flex: 1; text-align: right;">30分钟内送达</text>
         </view>
@@ -86,6 +87,13 @@
 				this.load()
 				},
 		methods: {
+			 search(res) {
+			      console.log("搜索的值是" + res.value);
+			      let value = res.value
+			      uni.navigateTo({
+			        url: '/pages/search/search?name=' + value
+			      })
+			    },
 		goToDeatil(businessId) {
 		  uni.navigateTo({
 		    url: '/pages/detail/detail?businessId=' + businessId

@@ -2,6 +2,7 @@ package com.example.mapper;
 
 
 import com.example.entity.Comment;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface CommentMapper {
 
     int deleteById(Integer id);
 
+    @Select("select * from comment where business_id = #{businessId}")
+    List<Comment> selectByBusinessId(Integer businessId);
 }

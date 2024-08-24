@@ -125,6 +125,7 @@ public class UserService {
         return dbUser;
     }
     public void register(Account account) {
+        System.out.println(account);
         User user = new User();
         BeanUtils.copyProperties(account, user);
         this.add(user);

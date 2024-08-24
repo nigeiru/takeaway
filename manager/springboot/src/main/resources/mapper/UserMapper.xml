@@ -37,6 +37,9 @@
             <if test="username != null">
                 and username = #{username}
             </if>
+                 <if test="role!= null">
+                and role = #{role}
+            </if>
             <if test="name != null">
                 and name like concat('%', #{name}, '%')
             </if>
@@ -55,14 +58,14 @@
             <if test="name != null">
                 name = #{name},
             </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
             <if test="avatar != null">
                 avatar = #{avatar},
             </if>
             <if test="role != null">
                 role = #{role},
-            </if>
-            <if test="sex != null">
-                role = #{sex},
             </if>
             <if test="phone != null">
                 phone = #{phone},
