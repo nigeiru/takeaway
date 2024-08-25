@@ -11,6 +11,7 @@ import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,6 +20,11 @@ import java.util.Objects;
 
 @Service
 public class UserService {
+    @Value("${server.port:9090}")
+    private String port;
+
+    @Value("${ip:localhost}")
+    private String ip;
     @Resource
     UserMapper userMapper;
     /**
@@ -55,6 +61,8 @@ public class UserService {
         if (dbuser2 != null && ObjectUtil.isNotEmpty(dbuser2) && !Objects.equals(dbuser2.getId(), user.getId())) {
             throw new CustomException(ResultCodeEnum.USER_EXIST_ERROR);
         }
+        String http = "http://" + ip + ":" + port + "/files/";
+        user.setAvatar(http + "1718184911949-安和昴.jpg");
         user.setRole(RoleEnum.USER.name());
         userMapper.insert(user);
     }
