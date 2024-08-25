@@ -1,6 +1,7 @@
 package com.example.service;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.example.common.enums.OrderStatusEnum;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.*;
@@ -106,18 +107,6 @@ public class BusinessService {
     }
 
     /**
-     * 查找全部商家
-     */
-    public List<Business> selectAll(Business business) {
-        List<Business> businesses=businessMapper.selectAll(business);
-        for (Business b :businesses) {
-            wrapBusiness(b);
-
-        }
-        return businessMapper.selectAll(business);
-    }
-
-    /**
      * 修改商家
      */
     public void updateById(Business business) {
@@ -178,21 +167,50 @@ public class BusinessService {
             }
         }
     }
-//    private void wrapBusiness(Business b) {
-//        List<Comment> commentList = commentService.selectByBusinessId(b.getId());
-//        double sum = commentList.stream().map(Comment::getStar).reduce(Double::sum).orElse(0D) + 5D;
-//        // 5 + 4.5 / 1 + 1
-//        double score = BigDecimal.valueOf(sum).divide(BigDecimal.valueOf(commentList.size() + 1), 1, BigDecimal.ROUND_UP).doubleValue();
-//        b.setScore(score);
-//
-////        // 查出所有有效的订单
-////        List<Orders> ordersList = ordersService.selectUsageByBusinessId(b.getId());
-////        int nums = 0;
-////        for (Orders orders : ordersList) {
-////            List<OrdersItem> ordersItemList = ordersItemService.selectByOrderId(orders.getId());
-////            // 聚合函数查出订单的商品数量
-////            nums += ordersItemList.stream().map(OrdersItem::getNum).reduce(Integer::sum).orElse(0);
-////        }
-////        b.setNums(nums);
-//    }
+    /**
+     * 查找全部商家
+     */
+    public List<Business> selectAll(Business business) {
+        List<Business> businesses = businessMapper.selectAll(business);
+        for (Business b : businesses) {
+            wrapBusiness(b);
+        }
+        return businesses;
+    }
+
+    private void wrapBusiness(Business b) {
+        // Handle potential null value for commentList
+        List<Comment> commentList = commentService.selectByBusinessId(b.getId());
+        double sum = 5D;  // Initialize sum with 5D
+        if (commentList != null && !commentList.isEmpty()) {
+            sum += commentList.stream().map(Comment::getStar).reduce(Double::sum).orElse(0D);
+        }
+
+        // Calculate score and handle potential division by zero
+        double score = BigDecimal.valueOf(sum)
+                .divide(BigDecimal.valueOf((commentList != null ? commentList.size() : 0) + 1), 1, BigDecimal.ROUND_UP)
+                .doubleValue();
+        b.setScore(score);
+
+        // Handle potential null value for ordersList
+        List<Orders> ordersList = ordersService.selectUsageByBusinessId(b.getId());
+        int nums = 0;
+        if (ordersList != null) {
+            for (Orders orders : ordersList) {
+                // Include only orders with status DONE or NO_COMMENT
+                    // Handle potential null value for ordersItemList
+                    List<OrdersItem> ordersItemList = ordersItemService.selectByOrderId(orders.getId());
+                    if (ordersItemList != null) {
+                        nums += ordersItemList.stream()
+                                .map(item -> item.getNum() != null ? item.getNum() : 0)
+                                .reduce(Integer::sum)
+                                .orElse(0);
+                    }
+
+            }
+        }
+        b.setNums(nums);
+    }
+
+
 }

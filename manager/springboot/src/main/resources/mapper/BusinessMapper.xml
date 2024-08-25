@@ -49,6 +49,9 @@
             <if test="name != null">
                 and name like concat('%', #{name}, '%')
             </if>
+                 <if test="type !=null">
+                    and type = #{type}
+                </if>
             <if test="status != null">
                 and status = #{status}
             </if>

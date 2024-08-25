@@ -39,6 +39,6 @@ public interface OrdersItemMapper {
     @Delete("delete from orders_item where order_id = #{orderId}")
     void deleteByOrderId(Integer orderId);
 
-    @Select("select * from orders_item where order_id = #{id}")
+    @Select("select * from orders_item where goods_id = #{id}")
     List<OrdersItem> selectByOrderId(Integer id);
 }

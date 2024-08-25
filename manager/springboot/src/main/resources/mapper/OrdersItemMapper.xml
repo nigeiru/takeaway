@@ -5,7 +5,7 @@
 <mapper namespace="com.example.mapper.OrdersItemMapper">
 
     <sql id="Base_Column_List">
-        id,order_id,goods_name,goods_img,price,num
+        id,order_id,goods_name,goods_img,price,num,goods_id
     </sql>
 
     <select id="selectAll" resultType="com.example.entity.OrdersItem">
@@ -43,6 +43,7 @@
             <if test="orderId != null">order_id,</if>
             <if test="goodsName != null">goods_name,</if>
             <if test="goodsImg != null">goods_img,</if>
+            <if test="goodsId != null">goods_id,</if>
             <if test="price != null">price,</if>
             <if test="num != null">num,</if>
 
@@ -52,6 +53,7 @@
             <if test="orderId != null">#{orderId},</if>
             <if test="goodsName != null">#{goodsName},</if>
             <if test="goodsImg != null">#{goodsImg},</if>
+            <if test="goodsId != null">#{goodsId},</if>
             <if test="price != null">#{price},</if>
             <if test="num != null">#{num},</if>
 
@@ -75,6 +77,9 @@
             </if>
             <if test="num != null">
                 num = #{num},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
             </if>
 
         </set>

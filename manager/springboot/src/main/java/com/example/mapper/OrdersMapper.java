@@ -35,7 +35,7 @@ public interface OrdersMapper {
      */
     List<Orders> selectAll(Orders orders);
 
-    @Select("SELECT * FROM orders WHERE business_id = #{id} AND (status != '待评价' AND status != '已完成')")
+    @Select("SELECT * FROM orders WHERE business_id = #{id} AND (status = '待评价' OR status = '已完成')")
     List<Orders> selectUsageByBusinessId(Integer id);
 
 }

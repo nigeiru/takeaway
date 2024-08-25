@@ -18,6 +18,8 @@ public class OrdersItem {
     private String goodsImg;
     /** 商品价格 */
     private BigDecimal price;
+    /** 商品规格 */
+    private Integer goodsId;
     /** 购买数量 */
     private Integer num;
 

@@ -13,8 +13,8 @@
 									
 							<view style="display: flex;  color: #666; ">
 								<view style="flex: 1;">
-									<text style="color: #ff9800; font-weight: bold;">4.5分</text>
-									<text style="margin-left: 10rpx;">已售30</text>
+									<text style="color: #ff9800; font-weight: bold;">{{item.business.score}}分</text>
+									<text style="font-size: 24rpx; margin-left: 10rpx;">已售 {{item.nums==null?0:item.nums}}</text>
 								</view>
 								<view style="flex: 1; text-align: right;">30分钟内送达</text>
 								</view>
@@ -31,7 +31,7 @@
 					<view style="text-align: right;">
 						<view style="width: fit-content; display: inline-block;" @click="del(item.id)">
 							<uni-icons type="trash" size="18" color="#888" style="position: relative; top: 3rpx;"></uni-icons>
-							<text style="color: #888;">删除</text>
+							<text style="color: #888;">取消收藏</text>
 						</view>
 					</view>
 
@@ -61,7 +61,7 @@
 				})
 			},
 			del(id) {
-				this.$request.del('/collect/delete/' + id).then(res => {
+				this.$request.post('/collect/delete/' , id).then(res => {
 					this.load()
 				})
 			},

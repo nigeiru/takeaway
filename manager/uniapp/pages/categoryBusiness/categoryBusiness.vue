@@ -1,6 +1,5 @@
 <template>
 	<view style="padding: 20rpx;">
-		<uni-search-bar @confirm="search" v-model="name"></uni-search-bar>
 		<view>
 			<view>
 				<view class="box" v-for="item in businessList" :key="item.id" style="margin-bottom: 20rpx;">
@@ -39,11 +38,13 @@
 		data() {
 			return {
 				name: '',
+				type:"",
 				businessList: []
 			}
 		},
 		onLoad(option) {
-			this.name = option.name
+			this.type=option.type
+			console.log(this.type)
 			this.load()
 		},
 		methods: {
@@ -58,7 +59,7 @@
 			},
 			load() {
 				// 获取商家的列表
-				this.$request.get('/business/selectAll', { name: this.name, status: '通过'  }).then(res => {
+				this.$request.get('/business/selectAll', {status: '通过' ,type:this.type }).then(res => {
 					this.businessList = res.data || []
 				})
 			}

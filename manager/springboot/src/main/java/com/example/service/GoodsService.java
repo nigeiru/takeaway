@@ -1,7 +1,10 @@
 package com.example.service;
 
+import com.example.common.enums.OrderStatusEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Goods;
+import com.example.entity.Orders;
+import com.example.entity.OrdersItem;
 import com.example.mapper.GoodsMapper;
 import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +27,10 @@ public class GoodsService {
     private GoodsMapper goodsMapper;
     @Resource
     private BusinessService businessService;
+    @Resource
+    private OrdersService ordersService;
+    @Resource
+    private OrdersItemService ordersItemService;
 
     /**
      * 新增
@@ -100,11 +108,28 @@ public class GoodsService {
      * 设置商品额外信息
      */
     private Goods wrapGoods(Goods goods) {
-        if (goods == null){
+        if (goods == null) {
             return null;
         }
         BigDecimal actualPrice = goods.getPrice().multiply(BigDecimal.valueOf(goods.getDiscount())).setScale(2, RoundingMode.UP);
         goods.setActualPrice(actualPrice);
+        int saleCount = 0;
+        List<OrdersItem> ordersItemList = ordersItemService.selectByGoodsId(goods.getId());
+        List<OrdersItem> usageOrdersItemList = new ArrayList<>();
+        for (OrdersItem ordersItem : ordersItemList) {
+            // 筛选出有效订单的商品销售额
+            Integer orderId = ordersItem.getOrderId();
+            Orders orders = ordersService.selectById(orderId);
+            if (orders == null) {
+                continue;
+            }
+            if (OrderStatusEnum.NO_COMMENT.getValue().equals(orders.getStatus()) || OrderStatusEnum.DONE.getValue().equals(orders.getStatus())) {
+                usageOrdersItemList.add(ordersItem);
+            }
+        }
+        // 聚合函数查出订单的商品数量
+        saleCount += usageOrdersItemList.stream().map(OrdersItem::getNum).reduce(Integer::sum).orElse(0);
+        goods.setSaleCount(saleCount);
         return goods;
     }
 }

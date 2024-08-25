@@ -152,6 +152,7 @@ public class OrdersService {
             ordersItem.setGoodsImg(cart.getGoods().getImg());
             ordersItem.setPrice(cart.getGoods().getActualPrice());
             ordersItem.setNum(cart.getNum());
+            ordersItem.setGoodsId(cart.getGoods().getId());
             ordersItemService.add(ordersItem);
         }
 

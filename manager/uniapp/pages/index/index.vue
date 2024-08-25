@@ -20,19 +20,19 @@
 <!-- 商家分类 -->
 <view class="box" style="margin: 20rpx 0;">
   <view style="display: flex;">
-    <view class="category-item">
+    <view class="category-item" @click="goBusiness('奶茶饮品')">
       <image src="@/static/imgs/咖啡.png" mode="widthFix" style="width: 50%;"></image>
       <text>奶茶饮品</text>
     </view>
-    <view class="category-item">
+    <view class="category-item" @click="goBusiness('轻食简餐')">
       <image src="@/static/imgs/轻食.png" mode="widthFix" style="width: 50%;"></image>
       <text>轻食简餐</text>
     </view>
-    <view class="category-item">
+    <view class="category-item" @click="goBusiness('炸鸡汉堡')">
       <image src="@/static/imgs/汉堡.png" mode="widthFix" style="width: 50%;"></image>
       <text>炸鸡汉堡</text>
     </view>
-    <view class="category-item">
+    <view class="category-item" @click="goBusiness('特色美味')">
       <image src="@/static/imgs/美食.png" mode="widthFix" style="width: 50%;"></image>
       <text>特色美味</text>
     </view>
@@ -52,7 +52,7 @@
       <view style="display: flex;  color: #666; ">
         <view style="flex: 1;">
           <text style="color: #ff9800; font-weight: bold;">{{item.score}}分</text>
-          <text style="margin-left: 10rpx;">已售{{item.num}}</text>
+          <text style="font-size: 24rpx; margin-left: 10rpx;">已售 {{item.nums==null?0:item.nums}}</text>
         </view>
         <view style="flex: 1; text-align: right;">30分钟内送达</text>
         </view>
@@ -94,6 +94,11 @@
 			        url: '/pages/search/search?name=' + value
 			      })
 			    },
+				goBusiness(tepy){
+					uni.navigateTo({
+						url:"/pages/categoryBusiness/categoryBusiness?type="+tepy
+					})
+				},
 		goToDeatil(businessId) {
 		  uni.navigateTo({
 		    url: '/pages/detail/detail?businessId=' + businessId

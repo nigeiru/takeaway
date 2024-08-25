@@ -77,7 +77,15 @@ public class OrdersItemService {
         ordersItemMapper.deleteByOrderId(orderId);
     }
 
-    public List<OrdersItem> selectByOrderId(Integer id) {
-        return ordersItemMapper.selectByOrderId(id);
+    public List<OrdersItem> selectByOrderId(Integer orderId) {
+        OrdersItem ordersItem = new OrdersItem();
+        ordersItem.setOrderId(ordersItem.getOrderId());
+        return ordersItemMapper.selectByOrderId(orderId);
+    }
+
+    public List<OrdersItem> selectByGoodsId(Integer goodsId) {
+        OrdersItem ordersItem = new OrdersItem();
+        ordersItem.setGoodsId(goodsId);
+        return ordersItemMapper.selectByOrderId(goodsId);
     }
 }

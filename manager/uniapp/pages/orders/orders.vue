@@ -79,20 +79,20 @@
 				})
 			},
 			del(orderId) {
-				this.$request.del('/orders/delete/' + orderId).then(res => {
-					if (res.code === '200') {
-					  uni.showToast({
-					    icon: "success",
-					    title: '操作成功'
-					  })
-					  this.loadOrders()
-					} else {
-					  uni.showToast({
-					    icon: "error",
-					    title: res.msg
-					  })
-					}
-				})
+			    this.$request.post('/orders/delete/', orderId).then(res => {
+			        if (res.code === '200') {
+			            uni.showToast({
+			                icon: "success",
+			                title: '操作成功'
+			            })
+			            this.loadOrders()
+			        } else {
+			            uni.showToast({
+			                icon: "error",
+			                title: res.msg
+			            })
+			        }
+			    })
 			},
 			changeStatus(orders, status) {
 				let form = JSON.parse(JSON.stringify(orders))

@@ -171,9 +171,7 @@
 						uni.removeStorage({
 							key:"xm-orders"
 						})
-						uni.redirectTo({
-							url:"/pages/detail/detail"
-						})
+						uni.navigateBack()
 					} else {
 						uni.showToast({
 							icon: "error",

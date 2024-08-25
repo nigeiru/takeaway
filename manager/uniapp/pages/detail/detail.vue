@@ -58,13 +58,13 @@
             <view style="font-size: 32rpx; font-weight: bold;">{{ item.name }}</view>
             <view style="font-size: 24rpx;">{{ item.descr }}</view>
             <view>
-              <text class="mini-btn">{{ item.discount }}折</text>
-              <text style="font-size: 24rpx; margin-left: 10rpx;">已售 30</text>
+              <text class="mini-btn">{{ item.discount!=1?item.discount*10+"折":"没有折扣" }}</text>
+              <text style="font-size: 24rpx; margin-left: 10rpx;">已售 {{item.saleCount==null?0:item.saleCount}}</text>
             </view>
             <view>
-              <text style="text-decoration: line-through;">￥{{ item.price }}</text>
+              <text style="text-decoration: line-through;" v-if="item.discount!=1">￥{{ item.price }}</text>
               <text style="color: orangered; margin-left: 10rpx;">￥{{ item.actualPrice }}</text>
-              <text class="mini-btn" style="margin-left: 5rpx;">到手价</text>
+              <text class="mini-btn" style="margin-left: 5rpx;"  v-if="item.discount!=1">到手价</text>
             </view>
             <view>
               <text class="mini-btn-fill" @click="addCart(item)">选购</text>
@@ -328,7 +328,7 @@
 			load() {
 				this.$request.get('/business/selectById/' + this.businessId).then(res => {
 					this.business = res.data || {}
-					console.log(this.business)
+					
 				})
 
 				this.$request.get('/category/selectAll', {

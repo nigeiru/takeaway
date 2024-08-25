@@ -35,5 +35,6 @@ public class Goods {
     private Integer categoryId;
     private String categoryName;
     private String businessName;
+    private Integer saleCount;
 
 }
